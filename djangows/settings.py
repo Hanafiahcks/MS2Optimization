@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'djangows.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'testdb',
+        'NAME': 'ms2',
         'USER': 'postgres',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
