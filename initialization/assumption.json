@@ -1,0 +1,19 @@
+{
+    "spbu": {
+        "priority": 0,
+        "max_cap": 40,
+        "opr_time": 16
+    },
+    "tbbm_capacity": {
+        "filling_capacity": 100000
+    },
+    "tbbm_filling_bay": {
+        "flow_rate": 800,
+        "avg_truck_velocity": 35,
+        "factor": 55,
+        "filling_point": 6
+    },
+    "spbu_tank_capacity": {
+        "tank_capacity": 45
+    }
+}

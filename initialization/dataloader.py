@@ -4,7 +4,18 @@
 import psycopg2
 import pandas as pd
 import pandas.io.sql as psql
-from __init__ import CONFIG
+
+import os
+import json
+
+basePath = os.path.dirname(os.path.abspath(__file__))
+config_file_path = basePath + "/config.json"
+assump_file_path = basePath + '/assumption.json'
+with open(config_file_path, 'r') as datafile:
+    CONFIG = json.load(datafile)
+with open(assump_file_path, 'r') as datafile:
+    ASSUMPTION = json.load(datafile)
+print("initialize DataLoader package")
 
 
 class DataLoader():
@@ -50,7 +61,21 @@ class DataLoader():
             f"select * from opt.t_filling_point where id_tbbm={self.id_tbbm}", conn)
         self.df_travel_path = pd.read_sql(
             "select * from opt.travel_path_tegal", conn)
-        pass
+        self.DF_DICT = {            # this dictionary purpose is to call all df in iteration loop
+            "demand": self.df_demand,
+            "demand_forecast": self.df_demand_forecast,
+            "distance_traveltime": self.df_distance_traveltime,
+            "good_issues": self.df_good_issues,
+            "historical_stock": self.df_historical_stock,
+            "intital_stock": self.df_initial_stock,
+            "spbu": self.df_spbu,
+            "spbu_tank_capacity": self.df_spbu_tank_capacity,
+            "tbbm_capacity": self.df_tbbm_capacity,
+            "tbbm_filling_bay": self.df_tbbm_filling_bay,
+            "tbbm_shift": self.df_tbbm_shift,
+            "travel_path": self.df_travel_path,
+            "truck": self.df_truck
+        }
 
     def read_parameter(self):
         if self.DL_CONFIG['id_tbbm'].upper() != 'X':  # testing mode
@@ -64,10 +89,25 @@ class DataLoader():
         else:
             # read parameter plan_date dari rest api (trigger dari web app)
             pass
-        print(f"TBBM : {self.id_tbbm}, plan_date : {self.plan_date}")
+        # print(f"TBBM : {self.id_tbbm}, plan_date : {self.plan_date}")
 
+    def handle_missing_data(self, export=False, fillna=True):
+        # dd_ = dirty data nomenklatur
+        list_dd = []
+        for df_name, df_col in ASSUMPTION.items():
+            print(f"key : {df_name}, col_df:{df_col}")
+            for col, ass_value in df_col.items():
+                print(
+                    f"key : {df_name}, key:{col}, assumption value:{ass_value}")
+                # get each dataframe from assumption json to be filtered and filled
+                df = self.DF_DICT[df_name]
+                dd = df[df[col].isna()]  # dd is dirty data
+                if export:
+                    dd.to_excel(f"dirty_data_{col}.xlsx")
+                if fillna:
+                    df[col].fillna(value=ass_value, inplace=True)
 
-# testing class
+        # testing class
 if __name__ == "__main__":
     DL = DataLoader(CONFIG)
-    print(DL.df_tbbm_shift)
+    DL.handle_missing_data(export=False, fillna=True)
