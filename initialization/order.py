@@ -12,7 +12,7 @@ class Order():
         self.merge_critical_time(source)
         self.merge_distance(source)
         print(self.df_order.columns)
-        self.sort_by(export=True)
+        self.sort_by()
         # filter and separate order from priority spbu and outstanding
         # self.df_prio_order = self.split_prio_order()
 
@@ -41,9 +41,9 @@ class Order():
                                 id_tbbm=source.id_tbbm, id_spbu=rows['id_spbu'])
             # print(
             #     f"from {source.id_tbbm} | to {rows['id_spbu']} | dist: {dist}")
-            self.df_order['distance'][idx] = dist
+            self.df_order.loc[idx,'distance'] = dist
 
-    def sort_by(self, Zonasi=True, Critical=True, export=False):
+    def sort_by(self, export=False):
         self.df_order = self.df_order.sort_values(
             by=['recommended_shift', 'distance', 'critical_time'], ascending=[True, True, True])
         if export:
