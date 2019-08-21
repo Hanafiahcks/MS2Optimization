@@ -1,1 +1,0 @@
-# defining global variabel

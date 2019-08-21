@@ -1,6 +1,9 @@
 import pandas as pd
-import initialization
+import initialization.dataloader as dl
+import initialization.order as order
 
 
 if __name__ == "__main__":
-    pass
+    DL = dl.DataLoader()
+    DL.handle_missing_data(export=False, fillna=True)
+    demand = order.Order(DL)
