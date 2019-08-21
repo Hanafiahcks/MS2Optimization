@@ -1,7 +1,7 @@
 {
     "db": "ms2",
     "user": "postgres",
-    "password": "admin",
+    "password": "DewaDB110",
     "host": "localhost",
     "port": "5432",
     "plan_date": "2019-05-05",
