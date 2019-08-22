@@ -14,6 +14,11 @@ step - 1. Initialize Data
         "status_kompartemen" = [False,False,True]  >> status terisi atau tidak     
         "status_PTO" = True/False
     }
+    rit_history  = [
+        {
+            
+        }
+    ]
 
 3. Order
     dict_order={

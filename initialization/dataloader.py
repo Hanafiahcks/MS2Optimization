@@ -45,8 +45,9 @@ class DataLoader():
         # open connection to DB
         conn = psycopg2.connect(database=con['db'], user=con['user'],
                                 password=con['password'], host=con['host'], port=con['port'])
-        self.df_spbu = pd.read_sql(
-            "select * from opt.t_spbu", conn)
+        # self.df_spbu = pd.read_sql(
+        #     "select * from opt.t_spbu", conn)
+        self.df_spbu = pd.read_excel(basePath+"/clean_data_spbu.xlsx") # for development purpose spbu master read from xlsx 
         self.df_spbu_tank_capacity = pd.read_sql(
             "select * from opt.t_spbu_capacity", conn)
         self.df_good_issues = pd.read_sql(
@@ -133,7 +134,6 @@ class DataLoader():
                         pass
                     else:
                         df[col].fillna(value=ass_value, inplace=True)
-        self.spbu_data_treatment()
 
     def data_treatment(self):
         # treatment to CONFIG : convert plan date type from string to date object
@@ -144,21 +144,25 @@ class DataLoader():
         # treatment to df if needed, for example add column from datetime -> date only
         self.df_demand_forecast['date'] = self.df_demand_forecast['datetime_stock'].dt.date
 
-    def spbu_data_treatment(self):
+    def spbu_data_treatment(self, export=False):
         # treatment for open time and close time based on operation time
         for idx, rows in self.df_spbu.iterrows():
-            if rows['opr_time'] == 24:
-                self.df_spbu.loc[idx,'open_time'] = '00:00:00'
-                self.df_spbu.loc[idx,'close_time'] = '23:59:00'
-            elif rows['opr_time'] <= 18:
-                self.df_spbu.loc[idx,'open_time'] = '06:00:00'
-                close = 5+rows['opr_time']
-                self.df_spbu.loc[idx,'close_time'] = f"{close}:59:00"
-            else:
-                open_time = 24+rows['opr_time']
-                self.df_spbu.loc[idx, 'open_time'] = f'{open_time}:00:00'
-                self.df_spbu.loc[idx, 'close_time'] = f"23:59:00"
-        print("spbu_data_treatment : ", self.df_spbu.info())
+            if rows['open_time'] == None or rows['close_time'] == None:
+                if rows['opr_time'] == 24:
+                    self.df_spbu.loc[idx, 'open_time'] = '00:00:00'
+                    self.df_spbu.loc[idx, 'close_time'] = '23:59:00'
+                elif rows['opr_time'] <= 18:
+                    self.df_spbu.loc[idx, 'open_time'] = '06:00:00'
+                    close = 5+int(rows['opr_time'])
+                    self.df_spbu.loc[idx, 'close_time'] = f"{close}:59:00"
+                else:
+                    open_time = 24+int(rows['opr_time'])
+                    self.df_spbu.loc[idx, 'open_time'] = f'{open_time}:00:00'
+                    self.df_spbu.loc[idx, 'close_time'] = f"23:59:00"
+            if rows['opr_time'] < 0:
+                self.df_spbu.loc[idx, 'opr_time'] = 24+rows['opr_time']
+        if export:
+            self.df_spbu.to_excel("clean_data_spbu.xlsx")
 
     def __str__(self):
         for key, df in self.DF_DICT.items():

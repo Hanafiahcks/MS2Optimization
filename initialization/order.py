@@ -11,7 +11,9 @@ class Order():
                                           'order_id', 'id_spbu', 'id_product', 'recommended_shift', 'quantity', 'stock']]
         self.merge_critical_time(source)
         self.merge_distance(source)
-        print(self.df_order.columns)
+        self.merge_max_cap(source)
+        self.merge_max_truck(source)
+        # print(self.df_order.columns)
         self.sort_by()
         # filter and separate order from priority spbu and outstanding
         # self.df_prio_order = self.split_prio_order()
@@ -19,6 +21,21 @@ class Order():
         # cumulative order
         # self.df_cum_order = self.df_order
         # self.aggregate_order()
+    def __str__(self):
+        return str(self.df_order)
+
+    def __get__(self):
+        return self.df_order
+
+    def merge_max_truck(self, source=DataLoader):
+        # df_tr = source.df_truck[]
+        max_truck = source.df_truck['capacity'].max()
+        self.df_order['max_truck'] = max_truck
+
+    def merge_max_cap(self, source=DataLoader):
+        self.df_order = pd.merge(self.df_order, source.df_spbu[['id_spbu', 'max_cap']],
+                                 how='left', on=['id_spbu'])
+        pass
 
     def merge_critical_time(self, source=DataLoader):
         self.df_order = pd.merge(self.df_order, source.df_demand_forecast[['id_spbu', 'id_product', 'critical_time']],
@@ -41,7 +58,7 @@ class Order():
                                 id_tbbm=source.id_tbbm, id_spbu=rows['id_spbu'])
             # print(
             #     f"from {source.id_tbbm} | to {rows['id_spbu']} | dist: {dist}")
-            self.df_order.loc[idx,'distance'] = dist
+            self.df_order.loc[idx, 'distance'] = dist
 
     def sort_by(self, export=False):
         self.df_order = self.df_order.sort_values(
