@@ -1,0 +1,14 @@
+.vscode
+.env
+*.pyc
+*~
+pycache
+myvenv
+db.sqlite3
+/static
+.DS_Store
+ms2optimization
+Pipfile
+*.lock
+*.json
+sumber
