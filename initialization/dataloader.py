@@ -53,7 +53,7 @@ class DataLoader():
         self.df_good_issues = pd.read_sql(
             f"select * from opt.t_gi where id_tbbm = {self.id_tbbm} and plan_date = '{self.plan_date}'", conn)
         self.df_tbbm_shift = pd.read_sql(
-            f"select * from opt.t_shift where id_tbbm = {self.id_tbbm}", conn)
+            f"select * from opt.t_shift where id_tbbm = {self.id_tbbm}", conn, index_col='shift')
         self.df_initial_stock = pd.read_sql(
             "select * from opt.t_initial_stock", conn)
         self.df_historical_stock = pd.read_sql(

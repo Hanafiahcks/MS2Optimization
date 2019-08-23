@@ -19,8 +19,8 @@ class Order():
         # self.df_prio_order = self.split_prio_order()
 
         # cumulative order
-        # self.df_cum_order = self.df_order
-        # self.aggregate_order()
+        self.df_cum_order = self.aggregate_order()        
+
     def __str__(self):
         return str(self.df_order)
 
@@ -65,6 +65,13 @@ class Order():
             by=['recommended_shift', 'distance', 'critical_time'], ascending=[True, True, True])
         if export:
             self.df_order.to_excel("sorted_order.xlsx")
-    # def aggregate_order(self):
-    #     # self.df_cum_order.groupby
-    #     pass
+    
+    def aggregate_order(self):
+        agr_order = self.df_order[['plan_date','id_spbu','id_product','recommended_shift','quantity','max_cap','max_truck']]
+        agr_order['count']=1
+        agr_order.groupby(['id_spbu', 'recommended_shift'])[
+            'id_spbu', 'id_product', 'recommended_shift','quantity','count'].sum()
+        return agr_order    
+
+    def get_cum_quan(self, id_spbu, shift):
+        return self.df_cum_order.loc[id_spbu].loc[shift].quantity
