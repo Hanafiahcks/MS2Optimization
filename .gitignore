@@ -1,0 +1,17 @@
+.vscode
+.env
+*.pyc
+*~
+pycache
+myvenv
+ms2optimization
+db.sqlite3
+/static
+.DS_Store
+Pipfile
+Pipfile.lock
+note*
+sumber/*
+setting.json
+*.sql
+initialization/config.json
