@@ -73,6 +73,14 @@ class DataLoader():
         # tapi lebih baik langsung dari hasil proses demand forecast yang di run saat optimasi
         # harus buat table baru untuk menampung demand forecast, semua demand forecast dalam 1 table
 
+        # pembentukan sales estimate lama based on script exorty
+        self.df_data_gi = pd.read_sql(
+            f"SELECT a.id_tbbm, a.id_spbu, a.id_product, a.gi_date, SUM(a.quantity) AS quantity,min(b.opr_time) AS opr_time"
+	        +" FROM opt.t_gi a LEFT JOIN opt.t_spbu b ON a.id_spbu=b.id_spbu"
+            +" GROUP BY a.id_tbbm, a.id_spbu, a.id_product, a.gi_date"
+            +" ORDER BY a.id_tbbm, a.id_spbu, a.id_product, a.gi_date", conn)
+
+
         self.df_truck = pd.read_sql(
             f"select * from opt.t_truck where id_tbbm = {self.id_tbbm}", conn)
         self.df_tbbm_capacity = pd.read_sql(

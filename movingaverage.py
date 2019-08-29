@@ -25,6 +25,8 @@ from initialization.dataloader import DataLoader
 
 #basePath = os.path.dirname(os.path.abspath(__file__))
 #pathfile = basePath + "/sumber/*.csv"
+
+#perlu di refactor masukan ke initial dan file paramter global
 pathfile = "/home/hanhan/Project/MS2Optimization/sumber/*.csv"
 daftarfile = glob.glob(pathfile)
 

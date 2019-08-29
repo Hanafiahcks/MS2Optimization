@@ -10,4 +10,6 @@ if __name__ == "__main__":
     TP = TruckPool(DL)
     VRouter = VehicleRouter(demand, TP)
     # print(truck_pool)
-    print(DL.df_truck.columns)
+    #print(DL.df_truck.columns)
+    print(DL.df_data_gi.columns)
+    

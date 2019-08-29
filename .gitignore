@@ -4,7 +4,6 @@
 *~
 pycache
 myvenv
-<<<<<<< HEAD
 db.sqlite3
 /static
 .DS_Store
@@ -13,7 +12,6 @@ Pipfile
 *.lock
 *.json
 sumber
-=======
 ms2optimization
 db.sqlite3
 /static
@@ -25,4 +23,5 @@ sumber/*
 setting.json
 *.sql
 initialization/config.json
->>>>>>> 27ef672d48d3e584175bee5e31c34e8d34d7e4e2
+testlearn
+.gitignore
