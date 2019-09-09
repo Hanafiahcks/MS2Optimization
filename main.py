@@ -2,14 +2,14 @@ import initialization.dataloader as dl
 import initialization.order as order
 from initialization.truck import Truck, TruckPool
 from optimisation.vehicle_router import VehicleRouter
+import forecasting.forecast_sales as fs
 
 if __name__ == "__main__":
     DL = dl.DataLoader()
     DL.handle_missing_data(export=False, fillna=True)
-    demand = order.Order(DL)
-    TP = TruckPool(DL)
-    VRouter = VehicleRouter(demand, TP)
+    #demand = order.Order(DL)
+    #TP = TruckPool(DL)
+    #VRouter = VehicleRouter(demand, TP)
     # print(truck_pool)
-    #print(DL.df_truck.columns)
-    print(DL.df_data_gi.columns)
+    print(DL.df_truck.columns)
     
